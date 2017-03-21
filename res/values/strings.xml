@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Shopper</string>
+    <string name="swipe_left_right_for_introduction">Swipe Left/Right for Introduction</string>
+    <string name="introduction_slide_1">Introduction Slide 1</string>
+    <string name="todo">TODO</string>
+    <string name="introduction_slide_2">Introduction Slide 2</string>
+    <string name="introduction_slide_3">Introduction Slide 3</string>
+    <string name="introduction_slide_4">Introduction Slide 4</string>
+    <string name="enter_username">Enter Username</string>
+    <string name="enter_passcode">Enter Passcode</string>
+    <string name="login">Login</string>
+    <string name="forgot_passcode">Forgot Passcode</string>
+    <string name="registration">Registration</string>
+    <string name="exit">Exit</string>
+    <string name="server_ip_address">Server IP Address</string>
+    <string name="save">Save</string>
+    <string name="title_activity_view__bill">View_Bill</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+</resources>

@@ -1,0 +1,114 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".Login" >
+
+    <EditText
+        android:id="@+id/minimum_stock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button_ok_add"
+        android:layout_alignRight="@+id/item_q"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:hint="Enter Minimum Stock"
+        android:inputType="text"
+        android:lines="1"
+        android:paddingLeft="9.0dip"
+        android:paddingRight="9.0dip"
+        android:textColor="@android:color/black"
+        android:textSize="14.0sp" />
+
+    <EditText
+        android:id="@+id/item_q"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/item_p"
+        android:layout_alignRight="@+id/item_p"
+        android:layout_below="@+id/item_p"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Enter Rate"
+        android:inputType="text"
+        android:lines="1"
+        android:paddingLeft="9.0dip"
+        android:paddingRight="9.0dip"
+        android:textColor="@android:color/black"
+        android:textSize="14.0sp" />
+
+    <EditText
+        android:id="@+id/item_p"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Enter Name"
+        android:inputType="text"
+        android:lines="1"
+        android:paddingLeft="9.0dip"
+        android:paddingRight="9.0dip"
+        android:textColor="@android:color/black"
+        android:textSize="14.0sp" />
+
+    <EditText
+        android:id="@+id/stock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/minimum_stock"
+        android:layout_alignLeft="@+id/minimum_stock"
+        android:layout_alignRight="@+id/item_q"
+        android:layout_marginBottom="14dp"
+        android:ems="10"
+        android:hint="Enter Stock"
+        android:inputType="text"
+        android:lines="1"
+        android:paddingLeft="9.0dip"
+        android:paddingRight="9.0dip"
+        android:textColor="@android:color/black"
+        android:textSize="14.0sp" />
+
+    <Button
+        android:id="@+id/button_ok_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/item_q"
+        android:layout_alignRight="@+id/item_q"
+        android:layout_below="@+id/minimum_stock"
+        android:layout_marginTop="68dp"
+        android:text="OK" />
+
+    <Button
+        android:id="@+id/button_cancel_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/item_q"
+        android:layout_alignRight="@+id/button_ok_add"
+        android:layout_below="@+id/button_ok_add"
+        android:text="Cancel" />
+
+    <EditText
+        android:id="@+id/nstock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button_ok_add"
+        android:layout_alignRight="@+id/button_ok_add"
+        android:layout_below="@+id/minimum_stock"
+        android:layout_marginTop="28dp"
+        android:editable="true"
+        android:ems="10"
+        android:hint="Enter New Stock"
+        android:inputType="text"
+        android:lines="1"
+        android:paddingLeft="9.0dip"
+        android:paddingRight="9.0dip"
+        android:textColor="@android:color/black"
+        android:textSize="14.0sp" />
+
+</RelativeLayout>
