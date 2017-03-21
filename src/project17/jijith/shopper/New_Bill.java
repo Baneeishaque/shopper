@@ -51,8 +51,10 @@ public class New_Bill extends Activity {
 	// private EditText quantity;
 	Button view_bill;
 	static Vector<Double> vector_total;
+	static Vector<String> vector_qty;
 	public static Vector<String> vector_bill_items;
-	private Vector<String> vector_items;
+	Vector<String> vector_items;
+	Vector<String> vector_ids;
 	int product_position;
 	// Button add_item;
 	ArrayAdapter<String> blank_adapter;
@@ -104,7 +106,9 @@ public class New_Bill extends Activity {
 		});
 		
 		vector_total = new Vector<>();
+		vector_qty = new Vector<>();
 		vector_items = new Vector<>();
+		vector_ids = new Vector<>();
 		vector_bill_items = new Vector<>();
 		list_products = (ListView) findViewById(R.id.list2);
 		list_bill = (ListView) findViewById(R.id.list_bill);
@@ -154,8 +158,12 @@ public class New_Bill extends Activity {
 			String item_amount="";
 			for(int i=0;i<vector_items.size();i++)
 			{
-				item_amount=item_amount+vector_items.elementAt(i)+":"+vector_total.elementAt(i)+":"+"-";
+				item_amount=item_amount+vector_ids.elementAt(i)+":"+vector_qty.elementAt(i)+":"+"-";
 			}
+			item_amount=item_amount.substring(0, item_amount.length()-2);
+			nvp.add(new BasicNameValuePair("customer_name", "ramees"));
+			nvp.add(new BasicNameValuePair("customer_mobile", "9446827218"));
+			
 			nvp.add(new BasicNameValuePair("item_amount", item_amount));
 			
 			httpost.setEntity(new UrlEncodedFormEntity(nvp));
@@ -249,25 +257,7 @@ public class New_Bill extends Activity {
 								// show_dialogue();
 							}
 
-							// private void show_dialogue() {
-							// // TODO Auto-generated method stub
-							// final Dialog dialog= new
-							// Dialog(getBaseContext());
-							// dialog.setContentView(R.layout.add_item);
-							// String[] tittlearray ={"Mr.","Mrs.","Ms"};
-							// Spinner tittleSpinner = (Spinner)
-							// dialog.findViewById(R.id.Tittle);
-							// ArrayAdapter<String> dataAdapter = new
-							// ArrayAdapter<String>(this,
-							// android.R.layout.simple_spinner_item,
-							// tittlearray);
-							//
-							// dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-							// tittleSpinner.setAdapter(dataAdapter);
-							// dialog.show();
-							//
-							// }
-
+							
 						});
 					} catch (JSONException e) {
 						Toast.makeText(getApplicationContext(), "Error : " + e.getLocalizedMessage(), Toast.LENGTH_LONG)
@@ -296,6 +286,7 @@ public class New_Bill extends Activity {
 	private void show_input_dialogue() {
 		// TODO Auto-generated method stub
 		// get prompts.xml view
+		
 		LayoutInflater li = LayoutInflater.from(getBaseContext());
 		View promptsView = li.inflate(R.layout.add_item, null);
 
@@ -312,6 +303,7 @@ public class New_Bill extends Activity {
 		final TextView item_price_label = (TextView) promptsView. findViewById(R.id.textView_price);
 
 		item_name.setText(product_Modal_list.get(product_position).getName());
+		final String item_id=product_Modal_list.get(product_position).getId();
 		price.setText("Unit Price : " + product_Modal_list.get(product_position).getUnitprice());
 		
 		item_name.setEnabled(false);
@@ -337,47 +329,6 @@ public class New_Bill extends Activity {
 
 		});
 
-		// quantity.setKeyListener(new KeyListener() {
-		//
-		// @Override
-		// public boolean onKeyUp(View view, Editable text, int keyCode,
-		// KeyEvent event) {
-		// // TODO Auto-generated method stub
-		// return false;
-		// }
-		//
-		// @Override
-		// public boolean onKeyOther(View view, Editable text, KeyEvent event) {
-		// // TODO Auto-generated method stub
-		// if(event.getKeyCode()==10)
-		// {
-		// name.setText(product_Modal_list.get(product_position).getName()+"
-		// Price
-		// "+String.valueOf(Double.parseDouble(product_Modal_list.get(product_position).getUnitprice())*Double.parseDouble(quantity.getText().toString())));
-		// }
-		// return false;
-		// }
-		//
-		// @Override
-		// public boolean onKeyDown(View view, Editable text, int keyCode,
-		// KeyEvent event) {
-		// // TODO Auto-generated method stub
-		// return false;
-		// }
-		//
-		// @Override
-		// public int getInputType() {
-		// // TODO Auto-generated method stub
-		// return 0;
-		// }
-		//
-		// @Override
-		// public void clearMetaKeyState(View view, Editable content, int
-		// states) {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		// });
 		
 		// set dialog message
 		alertDialogBuilder.setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -387,9 +338,11 @@ public class New_Bill extends Activity {
 				// get user input and set it to result
 //				blank_adapter.add(item_price_label.getText().toString());
 				vector_items.add(item_name.getText().toString());
+				vector_ids.add(item_id);
 				item_adapter.remove(item_name.getText().toString());
 				vector_bill_items.add(item_price_label.getText().toString());
 				vector_total.add(item_price);
+				vector_qty.add(quantity.getText().toString());
 				blank_adapter.clear();
 				blank_adapter.add("");
 				blank_adapter.add("Net Price : " + calculate_total());

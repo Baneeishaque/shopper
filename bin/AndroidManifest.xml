@@ -24,11 +24,13 @@
         <activity
             android:name=".SetIp"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".Introduction1"
@@ -53,6 +55,11 @@
         <activity
             android:name=".Login"
             android:label="Authentication" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Habout"
@@ -137,6 +144,14 @@
         <activity
             android:name=".View_Bill"
             android:label="@string/title_activity_view__bill" >
+        </activity>
+        <activity
+            android:name=".Bill_View"
+            android:label="@string/title_activity_bill__view" >
+        </activity>
+        <activity
+            android:name=".Bill_View_Details"
+            android:label="@string/title_activity_bill__view__details" >
         </activity>
     </application>
 

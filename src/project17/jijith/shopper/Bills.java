@@ -17,6 +17,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -32,16 +33,17 @@ import android.widget.Toast;
 
 public class Bills extends Activity {
 
+//	String shop_name="";
+	
 	ProgressDialog pd;
 	DefaultHttpClient httpcnt;
 	HttpPost httpost;
 	ArrayList<NameValuePair> nvp;
 	String response;
-
+	public static String bill_no;
 	Button button_new_bill;
 	ArrayList<String> item_list_array;
 	ListView list;
-//	ArrayList<Shop_Modal> shop_Modal_list;
 
 	// private Vector ls;
 
@@ -59,7 +61,7 @@ public class Bills extends Activity {
 
 			}
 		});
-		 list=(ListView) findViewById(R.id.list);
+		list = (ListView) findViewById(R.id.list);
 
 		// ls=new Vector();
 		// ls.add("Product 1");
@@ -71,27 +73,33 @@ public class Bills extends Activity {
 		// ArrayAdapter<String> adapter=new
 		// ArrayAdapter<String>(this,R.layout.listview,ls);
 		// list_notifications.setAdapter(adapter);
-
-		 pd = ProgressDialog.show(this, "", "Please wait...");
-		 new Thread(new Runnable() {
-		 public void run() {
-		 get_shops_by_owner();
-		 }
-		 }).start();
+		SharedPreferences settings = getApplicationContext().getSharedPreferences(General_Data.SHARED_PREFERENCE,
+				Context.MODE_PRIVATE);
+		setTitle(settings.getString("shop_name", "Shop Name")+" Bills");
+		pd = ProgressDialog.show(this, "", "Please wait...");
+		
+		
+		new Thread(new Runnable() {
+			public void run() {
+				get_bills_by_shop();
+			}
+		}).start();
+		
+		
 	}
-
+	
 	public void switch_activcity(Class to_class) {
 		Intent target = new Intent(this, to_class);
 		startActivity(target);
 
 	}
 
-	private void get_shops_by_owner() {
+	private void get_bills_by_shop() {
 		// TODO Auto-generated method stub
 		try {
 			httpcnt = new DefaultHttpClient();
-			httpost = new HttpPost("http://" + General_Data.SERVER_IP_ADDRESS
-					+ "/android-billing-server/android/get_bills_all.php");
+			httpost = new HttpPost(
+					"http://" + General_Data.SERVER_IP_ADDRESS + "/android-billing-server/android/get_bills_all.php");
 			nvp = new ArrayList<NameValuePair>(1);
 			SharedPreferences settings = getApplicationContext().getSharedPreferences(General_Data.SHARED_PREFERENCE,
 					Context.MODE_PRIVATE);
@@ -106,51 +114,45 @@ public class Bills extends Activity {
 					// TODO Auto-generated method stub
 					// Toast.makeText(Shops.this, response,
 					// Toast.LENGTH_LONG).show();
+					Log.d(General_Data.TAG, response);
 					pd.dismiss();
 
 					item_list_array = new ArrayList<String>();
-//					shop_Modal_list = new ArrayList<>();
+					// shop_Modal_list = new ArrayList<>();
 					try {
 
 						JSONArray json = new JSONArray(response);
 						for (int i = 0; i < json.length(); i++) {
 
 							// Populate spinner with country names
-							item_list_array.add(json.getJSONObject(i).getString("id"));
+							item_list_array.add(json.getJSONObject(i).getString("bill-no")+"-"+
+							json.getJSONObject(i).getString("customer-name")+"-"+
+									json.getJSONObject(i).getString("day")+":"+
+											json.getJSONObject(i).getString("month")+"-"+
+													json.getJSONObject(i).getString("year"));
 
-//							Shop_Modal sample_Shop_Modal = new Shop_Modal();
-//							sample_Shop_Modal.setId(json.getJSONObject(i).getString("reg.no"));
-//							sample_Shop_Modal.setName(json.getJSONObject(i).getString("name"));
-//							sample_Shop_Modal.setLocation(json.getJSONObject(i).getString("location"));
-//							sample_Shop_Modal.setCategory(json.getJSONObject(i).getString("category"));
-//							sample_Shop_Modal.setAdmin(json.getJSONObject(i).getString("admin"));
-//
-//							shop_Modal_list.add(sample_Shop_Modal);
+					
 
 						}
 						list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
 								android.R.layout.simple_list_item_1, item_list_array));
 						list.setOnItemClickListener(new OnItemClickListener() {
+							
+
 							@Override
 							public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-//								SharedPreferences settings;
-//								SharedPreferences.Editor editor;
-//								settings = getApplicationContext().getSharedPreferences(General_Data.SHARED_PREFERENCE,
-//										Context.MODE_PRIVATE);
-//								editor = settings.edit();
-//								editor.putString("shop_id", shop_Modal_list.get(position).getId());
-//								editor.commit();
-//
-//								Intent i = new Intent(getApplicationContext(), Shop_View.class);
-//								i.putExtra("sid", shop_Modal_list.get(position).getId());
-//								i.putExtra("sname", shop_Modal_list.get(position).getName());
-//								i.putExtra("scategory", shop_Modal_list.get(position).getCategory());
-//								i.putExtra("slocation", shop_Modal_list.get(position).getLocation());
-//								i.putExtra("sadmin", shop_Modal_list.get(position).getAdmin());
-//
-//								startActivity(i);
+								Intent target = new Intent(getBaseContext(), Bill_View.class);
+								get_bill_thread(list.getItemAtPosition(position).toString().
+										substring(0, list.getItemAtPosition(position).toString().indexOf("-")));
+								bill_no=list.getItemAtPosition(position).toString().
+										substring(0, list.getItemAtPosition(position).toString().indexOf("-"));
+								
+								startActivity(target);
+							
+								
 							}
+
+							
 						});
 					} catch (JSONException e) {
 						Toast.makeText(getApplicationContext(), "Error : " + e.getLocalizedMessage(), Toast.LENGTH_LONG)
@@ -174,7 +176,83 @@ public class Bills extends Activity {
 		}
 
 	}
+	
+	private void get_bill_thread(final String bill) {
+		// TODO Auto-generated method stub
+		 pd = ProgressDialog.show(this, "", "Please wait...");
+		new Thread(new Runnable() {
+			public void run() {
+				get_bill(bill);
+			}
+		}).start();
+	}
+	
+	private void get_bill(String bill) {
+		// TODO Auto-generated method stub
+		try {
+			httpcnt = new DefaultHttpClient();
+			httpost = new HttpPost(
+					"http://" + General_Data.SERVER_IP_ADDRESS + "/android-billing-server/android/get_bill.php");
+			nvp = new ArrayList<NameValuePair>(1);
 
+			nvp.add(new BasicNameValuePair("bill", bill));
+			httpost.setEntity(new UrlEncodedFormEntity(nvp));
+			ResponseHandler<String> s = new BasicResponseHandler();
+			response = httpcnt.execute(httpost, s);
+			runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					// Toast.makeText(Shops.this, response,
+					// Toast.LENGTH_LONG).show();
+					Log.d(General_Data.TAG, response);
+					pd.dismiss();
+
+					SharedPreferences settings = getApplicationContext()
+							.getSharedPreferences(General_Data.SHARED_PREFERENCE, Context.MODE_PRIVATE);
+					settings = getApplicationContext().getSharedPreferences(General_Data.SHARED_PREFERENCE,
+							Context.MODE_PRIVATE);
+					
+					try {
+
+						JSONArray json = new JSONArray(response);
+						for (int i = 0; i < json.length(); i++) {
+							Editor editor = settings.edit();
+							editor.putString("Customer","Customer : " + json.getJSONObject(i).getString("customer-name"));
+							editor.putString("Customer Phone","Customer Phone : " + json.getJSONObject(i).getString("customer-mob"));
+							
+							editor.putString("Date","Date : " + json.getJSONObject(i).getString("day") + ":"
+									+ json.getJSONObject(i).getString("month") + "-"
+									+ json.getJSONObject(i).getString("year"));
+							editor.putString("Time","Time : " + json.getJSONObject(i).getString("time")
+									.substring(json.getJSONObject(i).getString("time").indexOf(" ") + 1));
+							editor.commit();
+						}
+						
+
+					} catch (JSONException e) {
+						Toast.makeText(getApplicationContext(), "Error : " + e.getLocalizedMessage(), Toast.LENGTH_LONG)
+								.show();
+						Log.d(General_Data.TAG, e.getLocalizedMessage());
+					}
+
+				}
+			});
+		} catch (final Exception e) {
+			runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					Toast.makeText(getBaseContext(), "Error : " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+					Log.d(General_Data.TAG, e.getLocalizedMessage());
+					pd.dismiss();
+				}
+			});
+		}
+
+	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

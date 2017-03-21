@@ -180,6 +180,7 @@ public class Login extends Activity {
 									Context.MODE_PRIVATE);
 							editor = settings.edit();
 							editor.putString("shop_id", json.getJSONObject(0).getString("shop_id"));
+							editor.putString("shop_name", json.getJSONObject(0).getString("shop_name")+" "+json.getJSONObject(0).getString("shop_category"));
 							editor.putString("user_id", json.getJSONObject(0).getString("id"));
 							editor.commit();
 							Intent i;

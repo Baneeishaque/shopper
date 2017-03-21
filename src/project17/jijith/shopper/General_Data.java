@@ -6,6 +6,6 @@ package project17.jijith.shopper;
 
 public class General_Data {
     public static String TAG="Shopper";
-    public static String SERVER_IP_ADDRESS ="192.168.43.7";
+    public static String SERVER_IP_ADDRESS ="192.168.1.200";
     public static String SHARED_PREFERENCE = "Shopper";
 }

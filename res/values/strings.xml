@@ -19,5 +19,7 @@
     <string name="title_activity_view__bill">View_Bill</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_bill__view">Bill_View</string>
+    <string name="title_activity_bill__view__details">Bill_View_Details</string>
 
 </resources>
